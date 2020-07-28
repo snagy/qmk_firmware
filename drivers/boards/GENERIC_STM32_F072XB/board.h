@@ -70,7 +70,7 @@
 #define GPIOA_PIN6 6U
 #define GPIOA_PIN7 7U
 #define GPIOA_PIN8 8U
-#define GPIOA_PIN9 9U
+#define GPIOA_PIN9 9U // USART1_TX
 #define GPIOA_PIN10 10U
 #define GPIOA_USB_DM 11U
 #define GPIOA_USB_DP 12U
@@ -84,7 +84,7 @@
 #define GPIOB_PIN3 3U
 #define GPIOB_PIN4 4U
 #define GPIOB_PIN5 5U
-#define GPIOB_PIN6 6U
+#define GPIOB_PIN6 6U // USART1_TX
 #define GPIOB_PIN7 7U
 #define GPIOB_PIN8 8U
 #define GPIOB_PIN9 9U
