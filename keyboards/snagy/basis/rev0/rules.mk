@@ -34,5 +34,3 @@ SPLIT_KEYBOARD = yes       # Split common
 ENCODER_ENABLE = yes       # ENables the use of one or more encoders
 LINK_TIME_OPTIMIZATION_ENABLE =yes 
 LAYOUTS = all
-
-DEFAULT_FOLDER = snagy/basis

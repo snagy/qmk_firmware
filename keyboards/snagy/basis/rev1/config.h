@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x534E
 #define PRODUCT_ID      0x0001
-#define DEVICE_VER      0x0001
+#define DEVICE_VER      0x0002
 #define MANUFACTURER    Tangent Space
 #define PRODUCT         Basis Keyboard
 #define DESCRIPTION     Split ortho keyboard with three rotary encoders
@@ -53,7 +53,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
  * Split Keyboard specific options, make sure you have 'SPLIT_KEYBOARD = yes' in your rules.mk, and define SOFT_SERIAL_PIN.
  */
-#define USE_I2C
+#define SOFT_SERIAL_PIN B6  // USART TX pin
+#define SELECT_SOFT_SERIAL_SPEED 1 // or 0, 2, 3, 4, 5
+                                   //  0: about 460800 baud
+                                   //  1: about 230400 baud (default)
+                                   //  2: about 115200 baud
+                                   //  3: about 57600 baud
+                                   //  4: about 38400 baud
+                                   //  5: about 19200 baud
+#define SERIAL_USART_DRIVER SD1 // USART driver of TX pin. default: SD1
+#define SERIAL_USART_TX_PAL_MODE 7 // Pin "alternate function", see the respective datasheet for the appropriate values for your MCU. default: 7
 
 /* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
 #define LOCKING_SUPPORT_ENABLE
