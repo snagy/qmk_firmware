@@ -80,15 +80,33 @@
 #define STM32_EXT_EXTI17_IRQ_PRIORITY       3
 
 /*
+ * DAC driver system settings.
+ */
+#define STM32_DAC_DUAL_MODE                 FALSE
+#define STM32_DAC_USE_DAC1_CH1              FALSE
+#define STM32_DAC_USE_DAC1_CH2              TRUE
+#define STM32_DAC_USE_DAC2_CH1              FALSE
+#define STM32_DAC_DAC1_CH1_IRQ_PRIORITY     3
+#define STM32_DAC_DAC1_CH2_IRQ_PRIORITY     3
+#define STM32_DAC_DAC2_CH1_IRQ_PRIORITY     3
+#define STM32_DAC_DAC1_CH1_DMA_PRIORITY     2
+#define STM32_DAC_DAC1_CH2_DMA_PRIORITY     2
+#define STM32_DAC_DAC2_CH1_DMA_PRIORITY     2
+
+/*
  * GPT driver system settings.
  */
-#define STM32_GPT_USE_TIM1                  FALSE
+#define STM32_GPT_USE_TIM1                  TRUE
 #define STM32_GPT_USE_TIM2                  FALSE
 #define STM32_GPT_USE_TIM3                  FALSE
+#define STM32_GPT_USE_TIM6                  TRUE
+#define STM32_GPT_USE_TIM7                  TRUE
 #define STM32_GPT_USE_TIM14                 FALSE
 #define STM32_GPT_TIM1_IRQ_PRIORITY         2
 #define STM32_GPT_TIM2_IRQ_PRIORITY         2
 #define STM32_GPT_TIM3_IRQ_PRIORITY         2
+#define STM32_GPT_TIM6_IRQ_PRIORITY         2
+#define STM32_GPT_TIM7_IRQ_PRIORITY         2
 #define STM32_GPT_TIM14_IRQ_PRIORITY        2
 
 /*
@@ -121,9 +139,11 @@
 #define STM32_PWM_USE_TIM1                  FALSE
 #define STM32_PWM_USE_TIM2                  FALSE
 #define STM32_PWM_USE_TIM3                  FALSE
+#define STM32_PWM_USE_TIM16                 TRUE
 #define STM32_PWM_TIM1_IRQ_PRIORITY         3
 #define STM32_PWM_TIM2_IRQ_PRIORITY         3
 #define STM32_PWM_TIM3_IRQ_PRIORITY         3
+#define STM32_PWM_TIM16_IRQ_PRIORITY        3
 
 /*
  * SERIAL driver system settings.

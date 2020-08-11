@@ -24,6 +24,22 @@
 
 #include "eeconfig.h"
 
+#ifndef AUDIO_USE_CH1
+#define AUDIO_USE_CH1 TRUE
+#endif
+
+#ifndef AUDIO_USE_CH2
+#define AUDIO_USE_CH2 TRUE
+#endif
+
+#ifdef AUDIO_NOTE_TIMER
+#define CAT_X(A, B) A ## B
+#define CAT(A, B) CAT_X(A, B)
+#define AUDIO_NOTE_TIMER_GPT CAT(GPTD, AUDIO_NOTE_TIMER)
+#else
+#define AUDIO_NOTE_TIMER_GPT GPTD8
+#endif
+
 // -----------------------------------------------------------------------------
 
 int   voices        = 0;
@@ -77,7 +93,7 @@ bool     glissando      = true;
 #endif
 float startup_song[][2] = STARTUP_SONG;
 
-static void gpt_cb8(GPTDriver *gptp);
+static void gpt_cb_note(GPTDriver *gptp);
 
 #define DAC_BUFFER_SIZE 100
 #ifndef DAC_SAMPLE_MAX
@@ -128,7 +144,7 @@ GPTConfig gpt7cfg1 = {.frequency = 440U * DAC_BUFFER_SIZE,
                       .dier      = 0U};
 
 GPTConfig gpt8cfg1 = {.frequency = 10,
-                      .callback  = gpt_cb8,
+                      .callback  = gpt_cb_note,
                       .cr2       = TIM_CR2_MMS_1, /* MMS = 010 = TRGO on Update Event.    */
                       .dier      = 0U};
 
@@ -201,19 +217,24 @@ GPTConfig gpt8cfg1 = {.frequency = 10,
 //    101,   90,   80,   70,   61,   53,   45,   38,   32,   26,   20,   16
 // };
 
+#if AUDIO_USE_CH1
 // squarewave
 static const dacsample_t dac_buffer[DAC_BUFFER_SIZE] = {
     // First half is max, second half is 0
     [0 ... DAC_BUFFER_SIZE / 2 - 1]               = DAC_SAMPLE_MAX,
     [DAC_BUFFER_SIZE / 2 ... DAC_BUFFER_SIZE - 1] = 0,
 };
+#endif
 
+
+#if AUDIO_USE_CH2
 // squarewave
 static const dacsample_t dac_buffer_2[DAC_BUFFER_SIZE] = {
     // opposite of dac_buffer above
     [0 ... DAC_BUFFER_SIZE / 2 - 1]               = 0,
     [DAC_BUFFER_SIZE / 2 ... DAC_BUFFER_SIZE - 1] = DAC_SAMPLE_MAX,
 };
+#endif
 
 /*
  * DAC streaming callback.
@@ -238,13 +259,17 @@ static void error_cb1(DACDriver *dacp, dacerror_t err) {
     chSysHalt("DAC failure");
 }
 
+#if AUDIO_USE_CH1
 static const DACConfig dac1cfg1 = {.init = DAC_SAMPLE_MAX, .datamode = DAC_DHRM_12BIT_RIGHT};
 
 static const DACConversionGroup dacgrpcfg1 = {.num_channels = 1U, .end_cb = end_cb1, .error_cb = error_cb1, .trigger = DAC_TRG(0)};
+#endif
 
+#if AUDIO_USE_CH2
 static const DACConfig dac1cfg2 = {.init = DAC_SAMPLE_MAX, .datamode = DAC_DHRM_12BIT_RIGHT};
 
 static const DACConversionGroup dacgrpcfg2 = {.num_channels = 1U, .end_cb = end_cb1, .error_cb = error_cb1, .trigger = DAC_TRG(0)};
+#endif
 
 void audio_init() {
     if (audio_initialized) {
@@ -268,22 +293,38 @@ void audio_init() {
      * Starting DAC1 driver, setting up the output pin as analog as suggested
      * by the Reference Manual.
      */
+#if AUDIO_USE_CH1
     palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+#endif
+#if AUDIO_USE_CH2
     palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+#endif
+#if AUDIO_USE_CH1
     dacStart(&DACD1, &dac1cfg1);
+#endif
+#if AUDIO_USE_CH2
     dacStart(&DACD2, &dac1cfg2);
+#endif
 
     /*
      * Starting GPT6/7 driver, it is used for triggering the DAC.
      */
+#if AUDIO_USE_CH1
     START_CHANNEL_1();
+#endif
+#if AUDIO_USE_CH2
     START_CHANNEL_2();
+#endif
 
     /*
      * Starting a continuous conversion.
      */
+#if AUDIO_USE_CH1
     dacStartConversion(&DACD1, &dacgrpcfg1, (dacsample_t *)dac_buffer, DAC_BUFFER_SIZE);
+#endif
+#if AUDIO_USE_CH2
     dacStartConversion(&DACD2, &dacgrpcfg2, (dacsample_t *)dac_buffer_2, DAC_BUFFER_SIZE);
+#endif
 
     audio_initialized = true;
 
@@ -304,7 +345,7 @@ void stop_all_notes() {
 
     gptStopTimer(&GPTD6);
     gptStopTimer(&GPTD7);
-    gptStopTimer(&GPTD8);
+    gptStopTimer(&AUDIO_NOTE_TIMER_GPT);
 
     playing_notes = false;
     playing_note  = false;
@@ -346,9 +387,13 @@ void stop_note(float freq) {
             voice_place = 0;
         }
         if (voices == 0) {
+            #if AUDIO_USE_CH1
             STOP_CHANNEL_1();
+            #endif
+            #if AUDIO_USE_CH2
             STOP_CHANNEL_2();
-            gptStopTimer(&GPTD8);
+            #endif
+            gptStopTimer(&AUDIO_NOTE_TIMER_GPT);
             frequency     = 0;
             frequency_alt = 0;
             volume        = 0;
@@ -376,7 +421,7 @@ float vibrato(float average_freq) {
 
 #endif
 
-static void gpt_cb8(GPTDriver *gptp) {
+static void gpt_cb_note(GPTDriver *gptp) {
     float freq;
 
     if (playing_note) {
@@ -532,7 +577,7 @@ static void gpt_cb8(GPTDriver *gptp) {
                 } else {
                     STOP_CHANNEL_1();
                     STOP_CHANNEL_2();
-                    // gptStopTimer(&GPTD8);
+                    // gptStopTimer(&AUDIO_NOTE_TIMER_GPT);
                     playing_notes = false;
                     return;
                 }
@@ -587,10 +632,15 @@ void play_note(float freq, int vol) {
             voices++;
         }
 
-        gptStart(&GPTD8, &gpt8cfg1);
-        gptStartContinuous(&GPTD8, 2U);
+        gptStart(&AUDIO_NOTE_TIMER_GPT, &gpt8cfg1);
+        gptStartContinuous(&AUDIO_NOTE_TIMER_GPT, 2U);
+        
+        #if AUDIO_USE_CH1
         RESTART_CHANNEL_1();
+        #endif
+        #if AUDIO_USE_CH2
         RESTART_CHANNEL_2();
+        #endif
     }
 }
 
@@ -618,10 +668,15 @@ void play_notes(float (*np)[][2], uint16_t n_count, bool n_repeat) {
         note_length    = ((*notes_pointer)[current_note][1] / 4) * (((float)note_tempo) / 100);
         note_position  = 0;
 
-        gptStart(&GPTD8, &gpt8cfg1);
-        gptStartContinuous(&GPTD8, 2U);
+        gptStart(&AUDIO_NOTE_TIMER_GPT, &gpt8cfg1);
+        gptStartContinuous(&AUDIO_NOTE_TIMER_GPT, 2U);
+
+        #if AUDIO_USE_CH1
         RESTART_CHANNEL_1();
+        #endif
+        #if AUDIO_USE_CH2
         RESTART_CHANNEL_2();
+        #endif
     }
 }
 

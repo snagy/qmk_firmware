@@ -1,1 +1,1 @@
-DEFAULT_FOLDER = snagy/basis/rev1
+DEFAULT_FOLDER = snagy/basis/combo_rev2

@@ -26,26 +26,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT         Basis Keyboard
 #define DESCRIPTION     Split ortho keyboard with three rotary encoders
 
-#define SPLIT_USB_DETECT
-
 /* key matrix size */
 #define MATRIX_ROWS 10
 #define MATRIX_COLS 7
 
 // wiring
-#define MATRIX_ROW_PINS { B3, B7, D5, F4, F7 }
-#define MATRIX_COL_PINS { E6, B4, D7, D6, D4, D3, D2 }
+#define MATRIX_ROW_PINS { A15, H1, B1, B2, B10 }
+#define MATRIX_COL_PINS { B15, B9, B8, B7, B6, B5, B3 }
 #define UNUSED_PINS
-#define MATRIX_ROW_PINS_RIGHT { F7, F6, F5, B3, B2 }
-#define MATRIX_COL_PINS_RIGHT { D4, D6, D7, B4, C6, C7, B1 }
+#define MATRIX_ROW_PINS_RIGHT { A10, A8, B12, B5, B7 }
+#define MATRIX_COL_PINS_RIGHT { B0, B1, B2, B13, B14, B15, B3 }
 
-#define ENCODERS_PAD_A { B2, F0, F6 }
-#define ENCODERS_PAD_B { B1, F1, F5 }
+#define ENCODERS_PAD_A { A10, B13, B11 }
+#define ENCODERS_PAD_B { A8, B14, B12 }
 
 #define ENCODER_RESOLUTION 1
 
 /* COL2ROW, ROW2COL*/
 #define DIODE_DIRECTION COL2ROW
+
+
+#define RGB_DI_PIN B4
+#define RGBLIGHT_ANIMATIONS
+#define RGBLED_NUM 14
+#define RGBLIGHT_SPLIT
+#define RGBLED_SPLIT { 7, 7 }
+#define DRIVER_LED_TOTAL 14
+
+#define WS2812_PWM_DRIVER PWMD3
+#define WS2812_PWM_CHANNEL 1
+#define WS2812_PWM_PAL_MODE 2
+#define WS2812_DMA_STREAM STM32_DMA1_STREAM3
+#define WS2812_DMA_CHANNEL 3
+#define WS2812_PWM_TARGET_PERIOD 800000
+
+// 6 if these are set?
+//   SYSCFG->CFGR1 |= SYSCFG_CFGR1_TIM16_DMA_RMP;
+//   SYSCFG->CFGR1 |= SYSCFG_CFGR1_TIM16_DMA_RMP2;
+
+
+/*
+#define BACKLIGHT_PIN B8
+#define BACKLIGHT_PWM_DRIVER PWMD16
+#define BACKLIGHT_PWM_CHANNEL 1
+#define BACKLIGHT_PAL_MODE 2
+*/
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCE 5
@@ -53,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /*
  * Split Keyboard specific options, make sure you have 'SPLIT_KEYBOARD = yes' in your rules.mk, and define SOFT_SERIAL_PIN.
  */
-#define SOFT_SERIAL_PIN B6  // USART TX pin
+#define SOFT_SERIAL_PIN A9  // USART TX pin
 #define SELECT_SOFT_SERIAL_SPEED 1 // or 0, 2, 3, 4, 5
                                    //  0: about 460800 baud
                                    //  1: about 230400 baud (default)
@@ -64,7 +89,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SERIAL_USART_DRIVER SD1 // USART driver of TX pin. default: SD1
 #define SERIAL_USART_TX_PAL_MODE 7 // Pin "alternate function", see the respective datasheet for the appropriate values for your MCU. default: 7
 
-/* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
-#define LOCKING_SUPPORT_ENABLE
-/* Locking resynchronize hack */
-#define LOCKING_RESYNC_ENABLE
+// TODO Make this work
+//#define SPLIT_USB_DETECT FALSE
+#define SPLIT_HAND_PIN H0
+
+#define AUDIO_USE_CH1 FALSE
+#define AUDIO_USE_CH2 TRUE

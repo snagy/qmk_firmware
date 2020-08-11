@@ -282,6 +282,22 @@
 #        define F13 PAL_LINE(GPIOF, 13)
 #        define F14 PAL_LINE(GPIOF, 14)
 #        define F15 PAL_LINE(GPIOF, 15)
+#        define H0 PAL_LINE(GPIOH, 0)
+#        define H1 PAL_LINE(GPIOH, 1)
+#        define H2 PAL_LINE(GPIOH, 2)
+#        define H3 PAL_LINE(GPIOH, 3)
+#        define H4 PAL_LINE(GPIOH, 4)
+#        define H5 PAL_LINE(GPIOH, 5)
+#        define H6 PAL_LINE(GPIOH, 6)
+#        define H7 PAL_LINE(GPIOH, 7)
+#        define H8 PAL_LINE(GPIOH, 8)
+#        define H9 PAL_LINE(GPIOH, 9)
+#        define H10 PAL_LINE(GPIOH, 10)
+#        define H11 PAL_LINE(GPIOH, 11)
+#        define H12 PAL_LINE(GPIOH, 12)
+#        define H13 PAL_LINE(GPIOH, 13)
+#        define H14 PAL_LINE(GPIOH, 14)
+#        define H15 PAL_LINE(GPIOH, 15)
 #    endif
 #endif
 
