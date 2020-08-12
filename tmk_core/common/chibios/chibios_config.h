@@ -28,4 +28,8 @@
 #    define USE_I2CV1
 #    define USE_I2CV1_CONTRIB  // for some reason a bunch of ChibiOS-Contrib boards only have clock_speed
 #    define USE_GPIOV1
+#elif defined(STM32L4XX)
+#    define USE_GPIOV3
+#else
+#    define USE_GPIOV2
 #endif

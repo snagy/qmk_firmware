@@ -48,17 +48,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGB_DI_PIN B4
 #define RGBLIGHT_ANIMATIONS
-#define RGBLED_NUM 14
+#define RGBLED_NUM 16
 #define RGBLIGHT_SPLIT
-#define RGBLED_SPLIT { 7, 7 }
-#define DRIVER_LED_TOTAL 14
+#define RGBLED_SPLIT { 8, 8 }
+#define DRIVER_LED_TOTAL 16
 
 #define WS2812_PWM_DRIVER PWMD3
 #define WS2812_PWM_CHANNEL 1
 #define WS2812_PWM_PAL_MODE 2
-#define WS2812_DMA_STREAM STM32_DMA1_STREAM3
-#define WS2812_DMA_CHANNEL 3
-#define WS2812_PWM_TARGET_PERIOD 800000
+#define WS2812_DMA_STREAM STM32_DMA1_STREAM6
+#define WS2812_DMA_CHANNEL 6
+//#define WS2812_PWM_TARGET_PERIOD 800000
 
 // 6 if these are set?
 //   SYSCFG->CFGR1 |= SYSCFG_CFGR1_TIM16_DMA_RMP;
